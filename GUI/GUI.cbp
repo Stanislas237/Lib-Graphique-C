@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="GUI" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/GUI" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add directory="include" />
+				</Compiler>
+				<Linker>
+					<Add library="lib/libSDL2.a" />
+					<Add library="lib/libSDL2.dll.a" />
+					<Add library="lib/libSDL2main.a" />
+					<Add library="lib/libSDL2_test.a" />
+					<Add library="lib/libSDL2_ttf.a" />
+					<Add library="lib/libSDL2_ttf.dll.a" />
+					<Add directory="lib" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/GUI" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add directory="include" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="lib/libSDL2.a" />
+					<Add library="lib/libSDL2.dll.a" />
+					<Add library="lib/libSDL2main.a" />
+					<Add library="lib/libSDL2_test.a" />
+					<Add library="lib/libSDL2_ttf.a" />
+					<Add library="lib/libSDL2_ttf.dll.a" />
+					<Add directory="lib" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add directory="D:/My Files/Documents/GitHub/Lib-Graphique-C/include" />
+		</Compiler>
+		<Linker>
+			<Add library="mingw32" />
+			<Add library="SDL2main" />
+			<Add library="SDL2.dll" />
+			<Add library="user32" />
+			<Add library="gdi32" />
+			<Add library="winmm" />
+			<Add library="dxguid" />
+			<Add directory="D:/My Files/Documents/GitHub/Lib-Graphique-C/lib" />
+		</Linker>
+		<Unit filename="gui.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="gui.h" />
+		<Unit filename="main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="shapes.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="shapes.h" />
+		<Extensions />
+	</Project>
+</CodeBlocks_project_file>
