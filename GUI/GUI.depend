@@ -399,15 +399,15 @@
 	"begin_code.h"
 	"close_code.h"
 
-1759955818 source:d:\my files\documents\github\lib-graphique-c\gui\shapes.c
-	"shapes.h"
+1760104366 source:d:\my files\documents\github\lib-graphique-c\gui\shapes.c
+	"app.h"
 	<stdlib.h>
 	<math.h>
 	<string.h>
 	<stdio.h>
 	<ctype.h>
 
-1759951410 d:\my files\documents\github\lib-graphique-c\gui\shapes.h
+1760104356 d:\my files\documents\github\lib-graphique-c\gui\shapes.h
 	<SDL2/SDL.h>
 	<SDL2/SDL_ttf.h>
 
@@ -454,22 +454,20 @@
 	"begin_code.h"
 	"close_code.h"
 
-1759954939 source:d:\my files\documents\github\lib-graphique-c\gui\gui.c
+1760086713 source:d:\my files\documents\github\lib-graphique-c\gui\gui.c
 	"gui.h"
 	"shapes.h"
 	<stdlib.h>
 	<string.h>
 	<stdio.h>
 
-1759951509 d:\my files\documents\github\lib-graphique-c\gui\gui.h
-	<SDL2/SDL.h>
-
-1759954450 source:d:\my files\documents\github\lib-graphique-c\gui\main.c
+1760086434 d:\my files\documents\github\lib-graphique-c\gui\gui.h
 	<SDL2/SDL.h>
 	<SDL2/SDL_ttf.h>
+
+1760104485 source:d:\my files\documents\github\lib-graphique-c\gui\main.c
 	<stdio.h>
-	"gui.h"
-	"shapes.h"
+	"app.h"
 
 1759952438 d:\my files\documents\github\lib-graphique-c\gui\include\sdl2\sdl_main.h
 	"SDL_stdinc.h"
@@ -821,4 +819,36 @@
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
+
+1760086244 source:d:\my files\documents\github\lib-graphique-c\gui\algos.c
+	<stdio.h>
+	<stdlib.h>
+
+1760101893 d:\my files\documents\github\lib-graphique-c\gui\app.h
+	"utils.h"
+	"screen.h"
+
+1760101951 source:d:\my files\documents\github\lib-graphique-c\gui\app.c
+	"app.h"
+
+1760101884 source:d:\my files\documents\github\lib-graphique-c\gui\menu.c
+	"app.h"
+	<stdlib.h>
+	<string.h>
+
+1760104062 source:d:\my files\documents\github\lib-graphique-c\gui\sort.c
+	"app.h"
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+
+1760098329 d:\my files\documents\github\lib-graphique-c\gui\screen.h
+	"shapes.h"
+
+1760098104 source:d:\my files\documents\github\lib-graphique-c\gui\screen.c
+	"screen.h"
+	<stdlib.h>
+	<stdio.h>
+
+1760101923 d:\my files\documents\github\lib-graphique-c\gui\utils.h
 

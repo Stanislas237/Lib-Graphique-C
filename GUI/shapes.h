@@ -4,80 +4,57 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
-/* Basic RGBA color */
-typedef struct Color {
-    Uint8 r,g,b,a;
-} Color;
-
-/* Forward declarations */
 typedef struct Shape Shape;
 typedef struct Button Button;
-typedef struct TextView TextView;
 typedef struct InputField InputField;
 
-/* Base "class" */
+/* --- Base --- */
 struct Shape {
-    int x,y,w,h;
-    int radius; /* coin arrondi optionnel (pixels) */
-
-    Color bg;
-    Color border;
+    int x, y, w, h, radius;
+    int visible;
+    SDL_Color bg;
+    SDL_Color border;
+    SDL_Color text_color;
     int border_width;
-
     char *text;
     TTF_Font *font;
-    Color text_color;
-
-    /* "virtual" methods */
-    void (*draw)(SDL_Renderer *renderer, Shape *s);
-    void (*handle_event)(Shape *s, SDL_Event *ev);
-    void (*destroy)(Shape *s);
-    void (*update)(Shape *s, float dt);
-
-    /* user data */
     void *userdata;
-    int visible;
+
+    void (*draw)(Shape*, SDL_Renderer*);
+    void (*handle_event)(Shape*, SDL_Event*);
+    void (*destroy)(Shape*);
 };
 
-/* Create/destroy base shape */
-Shape *shape_create(int x,int y,int w,int h);
-void shape_destroy(Shape *s);
+Shape *shape_create(int x,int y,int w,int h, const char *text, SDL_Color color, TTF_Font *font);
 
-/* Utilities */
-SDL_Texture *render_text(SDL_Renderer *renderer, TTF_Font *font, const char *text, SDL_Rect *out_rect);
+/* --- Bouton --- */
+typedef void (*ButtonCallback)(Button*, void*);
 
-/* Button */
-typedef void (*button_cb)(Button *b, void *userdata);
 struct Button {
     Shape base;
+    char *label;
     int hovered;
     int pressed;
-    button_cb on_click;
-    button_cb on_hover;
+    SDL_Color hoverColor;
+    SDL_Color pressedColor;
+    ButtonCallback on_click;
+    ButtonCallback on_hover;
 };
 
-Button *button_create(int x,int y,int w,int h, const char *text, TTF_Font *font);
-void button_set_onclick(Button *b, button_cb cb);
-void button_set_onhover(Button *b, button_cb cb);
+Button* button_create(int x, int y, int w, int h, const char *label, TTF_Font *font);
+void button_set_onclick(Button *b, ButtonCallback cb);
 
-/* TextView */
-struct TextView {
-    Shape base;
-    /* could have alignment etc */
-};
+SDL_Texture *render_text(SDL_Renderer *renderer, TTF_Font *font, const char *text, SDL_Rect *out_rect);
 
-TextView *textview_create(int x,int y,int w,int h, const char *text, TTF_Font *font);
-
-/* InputField */
+/* --- Champ de saisie --- */
 struct InputField {
     Shape base;
     char *buffer;
-    int bufcap;
-    int cursor; /* position in chars */
+    int cursor;
+    int length;
     int focused;
+    SDL_Color color_focused;
 };
 
-InputField *inputfield_create(int x,int y,int w,int h, const char *initial, TTF_Font *font);
-
+InputField *inputfield_create(int x,int y,int w,int h,int length,const char *initial, TTF_Font *font);
 #endif
-
