@@ -40,7 +40,7 @@ static void on_sort(Button *b, void *userdata) {
     char *tok = strtok(temp, " ,-;+");
     while (tok && n < 128) {
         arr[n++] = atoi(tok);
-        tok = strtok(NULL, " ,-;+");
+        tok = strtok(NULL, " ,;+");
     }
 
     /* Ex�cute le tri selon le type */

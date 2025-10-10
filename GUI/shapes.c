@@ -199,7 +199,7 @@ static void input_draw(SDL_Renderer *renderer, Shape *s_base) {
         SDL_Surface *surf = TTF_RenderUTF8_Blended(s->font, in->buffer, (SDL_Color){s->text_color.r, s->text_color.g, s->text_color.b, s->text_color.a});
         if (surf) {
             SDL_Texture *tex = SDL_CreateTextureFromSurface(renderer, surf);
-            SDL_Rect dest = {s->x + (s->x - surf->w)/2, s->y + (s->h - surf->h)/2, surf->w, surf->h};
+            SDL_Rect dest = {s->x + 6, s->y + (s->h - surf->h)/2, surf->w, surf->h};
             SDL_RenderCopy(renderer, tex, NULL, &dest);
             SDL_DestroyTexture(tex);
             SDL_FreeSurface(surf);
