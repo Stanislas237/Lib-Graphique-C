@@ -1,6 +1,9 @@
 #include "app.h"
 
-/* === Crée l'application === */
+Screen* screen_menu_create(App *app, Screen *Sort);
+Screen* screen_sort_create(App *app, Screen *Menu);
+
+/* === Crï¿½e l'application === */
 App* app_create(const char *title, int w, int h) {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         printf("Erreur SDL_Init: %s\n", SDL_GetError());
@@ -35,14 +38,19 @@ App* app_create(const char *title, int w, int h) {
     }
 
     app->bg = (SDL_Color){240, 240, 240, 255};
-    app_set_screen(app, screen_menu_create(app));
+
+    Screen *Menu = screen_menu_create(app, NULL);
+    Screen *Sort = screen_sort_create(app, Menu);
+    Menu->next = Sort;
+    app_set_screen(app, Menu);
     return app;
 }
 
-/* === Change l’écran courant === */
+/* === Change lï¿½ï¿½cran courant === */
 void app_set_screen(App *app, Screen *screen) {
+    if (!app) return;
     if (app->screen)
-        screen_destroy(app->screen);
+        screen_clear(app->screen);
     app->screen = screen;
 }
 
@@ -63,7 +71,7 @@ int app_run(App *app) {
         }
     }
 
-    // Couleur d’arrière-plan
+    // Couleur dï¿½arriï¿½re-plan
     color_set(app->renderer, app->bg);
     SDL_RenderClear(app->renderer);
 
@@ -74,7 +82,7 @@ int app_run(App *app) {
     return 0;
 }
 
-/* === Détruit l'application === */
+/* === Dï¿½truit l'application === */
 void app_destroy(App *app) {
     if (!app)
         return;

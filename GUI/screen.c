@@ -2,11 +2,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-Screen* screen_create() {
+Screen* screen_create(Screen *next) {
     Screen *s = malloc(sizeof(Screen));
     s->count = 0;
     s->capacity = 5;
     s->elements = malloc(s->capacity * sizeof(Shape*));
+    s->next = next;
     return s;
 }
 
@@ -46,4 +47,12 @@ void screen_destroy(Screen *s) {
 
     free(s->elements);
     free(s);
+}
+
+/* === Reset de tous les boutons === */
+void screen_clear(Screen *s){
+    if (!s) return;
+    for (int i = 0; i < s->count; i++)
+        if (s->elements[i] && s->elements[i]->reset)
+            s->elements[i]->reset(s->elements[i]);
 }

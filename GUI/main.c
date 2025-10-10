@@ -3,6 +3,7 @@
 
 int main() {
     App *app = app_create("Algorithmes de tri", 500, 300);
+
     int quit = 0;
     while (quit == 0)
         quit = app_run(app);

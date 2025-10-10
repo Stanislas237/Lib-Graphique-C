@@ -28,6 +28,7 @@ struct Shape {
     void (*draw)(SDL_Renderer*, Shape*);
     void (*handle_event)(Shape*, SDL_Event*);
     void (*destroy)(Shape*);
+    void (*reset)(Shape*);
 };
 
 Shape *shape_create(int x,int y,int w,int h, const char *text, SDL_Color color, TTF_Font *font);

@@ -51,17 +51,31 @@
 			<Add library="dxguid" />
 			<Add directory="D:/My Files/Documents/GitHub/Lib-Graphique-C/lib" />
 		</Linker>
-		<Unit filename="gui.c">
+		<Unit filename="algos.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="gui.h" />
+		<Unit filename="app.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="app.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="menu.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="screen.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="screen.h" />
 		<Unit filename="shapes.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="shapes.h" />
+		<Unit filename="sort.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="utils.h" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

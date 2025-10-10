@@ -407,7 +407,7 @@
 	<stdio.h>
 	<ctype.h>
 
-1760110083 d:\my files\documents\github\lib-graphique-c\gui\shapes.h
+1760115100 d:\my files\documents\github\lib-graphique-c\gui\shapes.h
 	<SDL2/SDL.h>
 	<SDL2/SDL_ttf.h>
 
@@ -465,7 +465,7 @@
 	<SDL2/SDL.h>
 	<SDL2/SDL_ttf.h>
 
-1760112450 source:d:\my files\documents\github\lib-graphique-c\gui\main.c
+1760114585 source:d:\my files\documents\github\lib-graphique-c\gui\main.c
 	"app.h"
 
 1759952438 d:\my files\documents\github\lib-graphique-c\gui\include\sdl2\sdl_main.h
@@ -823,31 +823,31 @@
 	<stdio.h>
 	<stdlib.h>
 
-1760111648 d:\my files\documents\github\lib-graphique-c\gui\app.h
+1760114321 d:\my files\documents\github\lib-graphique-c\gui\app.h
 	"utils.h"
 	"screen.h"
 
 1760111893 source:d:\my files\documents\github\lib-graphique-c\gui\app.c
 	"app.h"
 
-1760112434 source:d:\my files\documents\github\lib-graphique-c\gui\menu.c
+1760114404 source:d:\my files\documents\github\lib-graphique-c\gui\menu.c
 	"app.h"
 	<stdlib.h>
 	<string.h>
 
-1760112953 source:d:\my files\documents\github\lib-graphique-c\gui\sort.c
+1760114028 source:d:\my files\documents\github\lib-graphique-c\gui\sort.c
 	"app.h"
 	<stdlib.h>
 	<stdio.h>
 	<string.h>
 
-1760111681 d:\my files\documents\github\lib-graphique-c\gui\screen.h
+1760115027 d:\my files\documents\github\lib-graphique-c\gui\screen.h
 	"shapes.h"
 
-1760111688 source:d:\my files\documents\github\lib-graphique-c\gui\screen.c
+1760113770 source:d:\my files\documents\github\lib-graphique-c\gui\screen.c
 	"screen.h"
 	<stdlib.h>
 	<stdio.h>
 
-1760112282 d:\my files\documents\github\lib-graphique-c\gui\utils.h
+1760113274 d:\my files\documents\github\lib-graphique-c\gui\utils.h
 

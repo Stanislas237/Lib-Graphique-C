@@ -3,20 +3,18 @@
 #include <string.h>
 
 /* D�claration de la fonction screen_sort_create */
-Screen* screen_sort_create(App *app, SortType type);
+Screen* screen_sort_create(App *app, Screen *Menu);
 
 /* === Callback : clic sur un bouton du menu === */
 static void on_menu_click(Button *b, void *userdata) {
     App *app = (App*)userdata;
-    if (strcmp(b->base.text, "Tri par selection") == 0)
-        app_set_screen(app, screen_sort_create(app, SORT_SELECTION));
-    else
-        app_set_screen(app, screen_sort_create(app, SORT_MERGE));
+    CURRENT_SORT_TYPE = strcmp(b->base.text, "Tri par selection") == 0 ? SORT_SELECTION : SORT_MERGE;
+    app_set_screen(app, app->screen->next);
 }
 
 /* === Cr�ation de l��cran du menu === */
-Screen* screen_menu_create(App *app) {
-    Screen *screen = screen_create();
+Screen* screen_menu_create(App *app, Screen *Sort) {
+    Screen *screen = screen_create(Sort);
 
     /* Bouton Tri par s�lection */
     Button *b_select = button_create(150, 120, 200, 60, "Tri par selection", app->font);

@@ -4,12 +4,12 @@
 #include <string.h>
 
 /* D�claration de la fonction screen_menu_create */
-Screen* screen_menu_create(App *app);
+Screen* screen_menu_create(App *app, Screen *Sort);
 
 /* === Callback : bouton Retour === */
 static void on_back(Button *b, void *userdata) {
     App *app = (App*)userdata;
-    app_set_screen(app, screen_menu_create(app));
+    app_set_screen(app, app->screen->next);
 }
 
 /* === Callback : bouton Trier === */
@@ -62,12 +62,11 @@ static void on_sort(Button *b, void *userdata) {
 }
 
 /* === Création de l'écran du tri === */
-Screen* screen_sort_create(App *app, SortType type) {
-    Screen *screen = screen_create();
-    CURRENT_SORT_TYPE = type;
+Screen* screen_sort_create(App *app, Screen *Menu) {
+    Screen *screen = screen_create(Menu);
 
     /* Titre */
-    const char *algo_name = (type == SORT_SELECTION) ? "Tri par selection" : "Tri par fusion";
+    const char *algo_name = (CURRENT_SORT_TYPE == SORT_SELECTION) ? "Tri par selection" : "Tri par fusion";
     Shape *title = shape_create(150, 10, 200, 60, algo_name, app->bg, app->font);
 
     /* Champ de saisie */
