@@ -399,7 +399,7 @@
 	"begin_code.h"
 	"close_code.h"
 
-1760115208 source:d:\my files\documents\github\lib-graphique-c\gui\shapes.c
+1760117807 source:d:\my files\documents\github\lib-graphique-c\gui\shapes.c
 	"app.h"
 	<stdlib.h>
 	<math.h>
@@ -407,7 +407,7 @@
 	<stdio.h>
 	<ctype.h>
 
-1760115100 d:\my files\documents\github\lib-graphique-c\gui\shapes.h
+1760117790 d:\my files\documents\github\lib-graphique-c\gui\shapes.h
 	<SDL2/SDL.h>
 	<SDL2/SDL_ttf.h>
 
@@ -838,33 +838,33 @@
 	<stdio.h>
 	<stdlib.h>
 
-1760114321 d:\my files\documents\github\lib-graphique-c\gui\app.h
+1760118768 d:\my files\documents\github\lib-graphique-c\gui\app.h
 	"utils.h"
 	"screen.h"
 
-1760115306 source:d:\my files\documents\github\lib-graphique-c\gui\app.c
+1760119093 source:d:\my files\documents\github\lib-graphique-c\gui\app.c
 	"app.h"
 
-1760114404 source:d:\my files\documents\github\lib-graphique-c\gui\menu.c
+1760119273 source:d:\my files\documents\github\lib-graphique-c\gui\menu.c
 	"app.h"
 	<stdlib.h>
 	<string.h>
 
-1760114028 source:d:\my files\documents\github\lib-graphique-c\gui\sort.c
+1760118452 source:d:\my files\documents\github\lib-graphique-c\gui\sort.c
 	"app.h"
 	<stdlib.h>
 	<stdio.h>
 	<string.h>
 
-1760115027 d:\my files\documents\github\lib-graphique-c\gui\screen.h
+1760119132 d:\my files\documents\github\lib-graphique-c\gui\screen.h
 	"shapes.h"
 
-1760115258 source:d:\my files\documents\github\lib-graphique-c\gui\screen.c
+1760119178 source:d:\my files\documents\github\lib-graphique-c\gui\screen.c
 	"screen.h"
 	<stdlib.h>
 	<stdio.h>
 
-1760113274 d:\my files\documents\github\lib-graphique-c\gui\utils.h
+1760118879 d:\my files\documents\github\lib-graphique-c\gui\utils.h
 
 1760116408 d:\my files\documents\github\lib-graphique-c\gui\include\sdl2\sdl_config_windows.h
 	"SDL_platform.h"

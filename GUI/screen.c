@@ -8,6 +8,7 @@ Screen* screen_create(Screen *next) {
     s->capacity = 5;
     s->elements = malloc(s->capacity * sizeof(Shape*));
     s->next = next;
+    s->title = "Menu";
     return s;
 }
 

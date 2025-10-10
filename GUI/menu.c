@@ -9,6 +9,7 @@ Screen* screen_sort_create(App *app, Screen *Menu);
 static void on_menu_click(Button *b, void *userdata) {
     App *app = (App*)userdata;
     CURRENT_SORT_TYPE = strcmp(b->base.text, "Tri par selection") == 0 ? SORT_SELECTION : SORT_MERGE;
+    app->screen->next->title = b->base.text;
     app_set_screen(app, app->screen->next);
 }
 

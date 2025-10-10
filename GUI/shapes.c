@@ -136,7 +136,7 @@ static void button_draw(SDL_Renderer *renderer, Shape *s_base) {
     draw_shape_text(renderer, s);
 }
 
-static void button_reset(Shape* s_base){
+static void button_reset(Shape* s_base) {
     Button *b = (Button*)s_base;
     b->pressed = 0;
     b->hovered = 0;

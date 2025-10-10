@@ -44,10 +44,14 @@ static void on_sort(Button *b, void *userdata) {
     }
 
     /* Ex�cute le tri selon le type */
-    if (CURRENT_SORT_TYPE == SORT_SELECTION)
+    if (!strcmp(screen->title, "Tri par selection")){
+        printf("Performing Selection Sort on %d elements\n", n);
         selection_sort(arr, n);
-    else
+    }
+    else{
+        printf("Performing Merge Sort on %d elements\n", n);
         merge_sort(arr, n);
+    }
 
     /* Construit la chaîne de sortie */
     char buf[512] = "";
@@ -61,6 +65,23 @@ static void on_sort(Button *b, void *userdata) {
     output->text = strdup(buf);
 }
 
+void set_text(Shape *s, const char *text){
+    if (!s) return;
+    free(s->text);
+    s->text = strdup(text);
+}
+
+static void set_title_text(Shape *s){
+    if (!s) return;
+    Screen *screen = (Screen*)s->userdata;
+    set_text(s, screen->title);
+}
+
+static void set_output_empty(Shape *s){
+    if (!s) return;
+    set_text(s, "");
+}
+
 /* === Création de l'écran du tri === */
 Screen* screen_sort_create(App *app, Screen *Menu) {
     Screen *screen = screen_create(Menu);
@@ -68,6 +89,8 @@ Screen* screen_sort_create(App *app, Screen *Menu) {
     /* Titre */
     const char *algo_name = (CURRENT_SORT_TYPE == SORT_SELECTION) ? "Tri par selection" : "Tri par fusion";
     Shape *title = shape_create(150, 10, 200, 60, algo_name, app->bg, app->font);
+    title->userdata = screen;
+    title->reset = set_title_text;
 
     /* Champ de saisie */
     InputField *input = inputfield_create(50, 75, 400, 40, 30, "5,8,300,-4,15", app->font);
@@ -83,6 +106,7 @@ Screen* screen_sort_create(App *app, Screen *Menu) {
     output->border = (SDL_Color){100,100,100,255};
     output->border_width = 1;
     output->userdata = "output";
+    output->reset = set_output_empty;
 
     /* Bouton Trier */
     Button *btn_sort = button_create(90, 200, 120, 50, "Trier", app->font);

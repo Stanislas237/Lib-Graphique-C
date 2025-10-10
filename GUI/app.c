@@ -49,9 +49,8 @@ App* app_create(const char *title, int w, int h) {
 /* === Change l��cran courant === */
 void app_set_screen(App *app, Screen *screen) {
     if (!app) return;
-    if (app->screen)
-        screen_clear(app->screen);
     app->screen = screen;
+    screen_clear(app->screen);
 }
 
 /* === Boucle principale === */

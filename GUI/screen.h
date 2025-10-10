@@ -6,6 +6,7 @@
 typedef struct Screen {
     Shape **elements;
     struct Screen *next;
+    char* title;
     int count;
     int capacity;
 } Screen;
