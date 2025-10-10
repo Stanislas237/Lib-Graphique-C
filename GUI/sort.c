@@ -68,10 +68,10 @@ Screen* screen_sort_create(App *app, SortType type) {
 
     /* Titre */
     const char *algo_name = (type == SORT_SELECTION) ? "Tri par selection" : "Tri par fusion";
-    Shape *title = shape_create(300, 40, 200, 50, algo_name, app->bg, app->font);
+    Shape *title = shape_create(150, 10, 200, 60, algo_name, app->bg, app->font);
 
     /* Champ de saisie */
-    InputField *input = inputfield_create(200, 150, 400, 40, 30, "5,8,300,-4,15", app->font);
+    InputField *input = inputfield_create(50, 75, 400, 40, 30, "5,8,300,-4,15", app->font);
     input->base.bg = (SDL_Color){255,255,255,255};
     input->base.border = (SDL_Color){100,100,100,255};
     input->base.border_width = 1;
@@ -80,14 +80,13 @@ Screen* screen_sort_create(App *app, SortType type) {
     input->base.userdata = "input";
 
     /* Zone de texte pour le résultat */
-    Shape *output = shape_create(200, 300, 400, 40, "", (SDL_Color){0,0,0,160}, app->font);
-    output->bg = (SDL_Color){255,255,255,255};
+    Shape *output = shape_create(50, 130, 400, 40, "", (SDL_Color){200,200,200,255}, app->font);
     output->border = (SDL_Color){100,100,100,255};
     output->border_width = 1;
     output->userdata = "output";
 
     /* Bouton Trier */
-    Button *btn_sort = button_create(200, 350, 120, 50, "Trier", app->font);
+    Button *btn_sort = button_create(90, 200, 120, 50, "Trier", app->font);
     btn_sort->base.bg = (SDL_Color){155, 89, 182, 255}; // violet
     btn_sort->base.text_color = (SDL_Color){255,255,255,255};
     btn_sort->hoverColor = (SDL_Color){200, 180, 30, 255}; // orange
@@ -96,13 +95,13 @@ Screen* screen_sort_create(App *app, SortType type) {
     btn_sort->on_click = on_sort;
 
     /* Bouton Retour */
-    Button *btn_back = button_create(480, 350, 120, 50, "Retour", app->font);
+    Button *btn_back = button_create(300, 200, 120, 50, "Retour", app->font);
     btn_back->base.bg = (SDL_Color){231, 76, 60, 255}; // rouge
     btn_back->base.text_color = (SDL_Color){255,255,255,255};
     btn_back->hoverColor = (SDL_Color){200, 180, 30, 255}; // orange
     btn_back->pressedColor = (SDL_Color){150, 130, 0, 255}; // orange sombre
-    btn_back->on_click = on_back;
     btn_back->base.userdata = app;
+    btn_back->on_click = on_back;
 
     /* Ajout des éléments */
     screen_add(screen, title);

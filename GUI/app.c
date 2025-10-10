@@ -1,24 +1,5 @@
 #include "app.h"
 
-void WindowResizeHandler(SDL_Event *e, SDL_Window* window){
-    if (e->window.event == SDL_WINDOWEVENT_RESIZED) {
-        SDL_GetWindowSize(window, &SCREEN_WIDTH, &SCREEN_HEIGHT);
-
-        if (SCREEN_WIDTH < MIN_SCREEN_WIDTH)
-            SCREEN_WIDTH = MIN_SCREEN_WIDTH;
-        else if (SCREEN_WIDTH > MAX_SCREEN_WIDTH)
-            SCREEN_WIDTH = MAX_SCREEN_WIDTH;
-
-        if (SCREEN_HEIGHT < MIN_SCREEN_HEIGHT)
-            SCREEN_HEIGHT = MIN_SCREEN_HEIGHT;
-        else if (SCREEN_HEIGHT > MAX_SCREEN_HEIGHT)
-            SCREEN_HEIGHT = MAX_SCREEN_HEIGHT;
-
-        // Redimensionner la fenêtre si nécessaire
-        SDL_SetWindowSize(window, SCREEN_WIDTH, SCREEN_HEIGHT);
-    }
-}
-
 /* === Crée l'application === */
 App* app_create(const char *title, int w, int h) {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -66,22 +47,21 @@ void app_set_screen(App *app, Screen *screen) {
 }
 
 /* === Boucle principale === */
-int app_run(App *app, SDL_Event *e) {
+int app_run(App *app) {
     if (!app)
-        return 0;
+        return 1;
 
-    while (SDL_PollEvent(e))
-        switch (e->type){
+    SDL_Event ev;
+    while (SDL_PollEvent(&ev)){
+        switch (ev.type){
             case SDL_QUIT:
-                return 0;
-            case SDL_WINDOWEVENT:
-                // Vérifier si l'événement est un redimensionnement de la fenêtre
-                WindowResizeHandler(e, app->window);
-                break;
+                return 1;
             default:
                 if (app->screen)
-                    screen_handle_event(app->screen, e);
+                    screen_handle_event(app->screen, &ev);
+                break;
         }
+    }
 
     // Couleur d’arrière-plan
     color_set(app->renderer, app->bg);
@@ -91,7 +71,7 @@ int app_run(App *app, SDL_Event *e) {
         screen_render(app->screen, app->renderer);
     SDL_RenderPresent(app->renderer);
     SDL_Delay(17); // ~60 FPS
-    return 1;
+    return 0;
 }
 
 /* === Détruit l'application === */

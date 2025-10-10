@@ -1,15 +1,11 @@
 #define SDL_MAIN_HANDLED
-
-#include <stdio.h>
 #include "app.h"
 
-int main(void) {
-    App *app = app_create("Algorithmes de tri", 800, 600);
-    int running = 1;
-    SDL_Event ev;
-
-    while (running == 1)
-        running = app_run(app, &ev);
+int main() {
+    App *app = app_create("Algorithmes de tri", 500, 300);
+    int quit = 0;
+    while (quit == 0)
+        quit = app_run(app);
     app_destroy(app);
     return 0;
 }

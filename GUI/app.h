@@ -14,7 +14,7 @@ typedef struct App {
 
 App* app_create(const char *title, int w, int h);
 void app_set_screen(App *app, Screen *screen);
-int app_run(App *app, SDL_Event *e);
+int app_run(App *app);
 void app_destroy(App *app);
 
 #endif
