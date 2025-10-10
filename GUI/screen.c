@@ -2,32 +2,32 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-Screen* screen_create(void) {
+Screen* screen_create() {
     Screen *s = malloc(sizeof(Screen));
-    s->capacity = 8;
+    s->count = 0;
+    s->capacity = 5;
     s->elements = malloc(s->capacity * sizeof(Shape*));
     return s;
 }
 
 void screen_add(Screen *s, Shape *shape) {
     if (s->count >= s->capacity) {
-        s->capacity *= 2;
+        s->capacity += s->capacity;
         s->elements = realloc(s->elements, s->capacity * sizeof(Shape*));
     }
     s->elements[s->count++] = shape;
 }
 
-/* === Rendu de tous les éléments === */
+/* === Rendu de tous les ï¿½lï¿½ments === */
 void screen_render(Screen *s, SDL_Renderer *renderer) {
     for (int i = 0; i < s->count; i++) {
         Shape *sh = s->elements[i];
-        if (sh && sh->visible && sh->draw) {
-            sh->draw(sh, renderer);
-        }
+        if (sh && sh->visible && sh->draw)
+            sh->draw(renderer, sh);
     }
 }
 
-/* === Gestion des événements (clics, clavier, etc.) === */
+/* === Gestion des ï¿½vï¿½nements (clics, clavier, etc.) === */
 void screen_handle_event(Screen *s, SDL_Event *e) {
     for (int i = 0; i < s->count; i++) {
         Shape *sh = s->elements[i];
@@ -37,14 +37,13 @@ void screen_handle_event(Screen *s, SDL_Event *e) {
     }
 }
 
-/* === Libération complète d’un écran === */
+/* === Libï¿½ration complï¿½te dï¿½un ï¿½cran === */
 void screen_destroy(Screen *s) {
     if (!s) return;
-    for (int i = 0; i < s->count; i++) {
-        if (s->elements[i] && s->elements[i]->destroy) {
+    for (int i = 0; i < s->count; i++)
+        if (s->elements[i] && s->elements[i]->destroy)
             s->elements[i]->destroy(s->elements[i]);
-        }
-    }
+
     free(s->elements);
     free(s);
 }

@@ -13,16 +13,10 @@
 #define MIN(a,b) ((a)<(b)?(a):(b))
 #endif
 
-/* --- simple helpers --- */
-
-static void color_set(SDL_Renderer *r, SDL_Color c) {
-    SDL_SetRenderDrawColor(r, c.r, c.g, c.b, c.a);
-}
-
 /* filled circle drawing (na�f) -- used for rounded corners */
 static void filledCircleRGBA(SDL_Renderer *renderer, int x0, int y0, int radius) {
     for (int y = -radius; y <= radius; y++) {
-        int dx = (int)floor(sqrt(radius*radius - y*y));
+        int dx = (int)floor(sqrt(radius * radius - y * y));  // Calcul du rayon pour chaque ligne
         for (int x = -dx; x <= dx; x++) {
             SDL_RenderDrawPoint(renderer, x0 + x, y0 + y);
         }
@@ -87,8 +81,6 @@ static void shape_destroy(Shape *s) {
     if (!s) return;
     if (s->text)
         free(s->text);
-    if (s->font)
-        free(s->font);
     free(s);
 }
 
@@ -108,16 +100,17 @@ SDL_Texture *render_text(SDL_Renderer *renderer, TTF_Font *font, const char *tex
 }
 
 /* --- Shape base --- */
-Shape *shape_create(int x,int y,int w,int h, const char *text, SDL_Color color, TTF_Font *font) {
+Shape *shape_create(int x,int y,int w,int h, const char *text, SDL_Color bg_color, TTF_Font *font) {
     Shape *s = malloc(sizeof(Shape));
+    s->visible = 1;
     s->x = x; s->y = y; s->w = w; s->h = h;
     s->radius = 0;
-    s->bg = (SDL_Color){0,0,0,0};
+    s->bg = bg_color;
     s->border = (SDL_Color){0,0,0,255};
     s->border_width = 0;
     if (text) s->text = strdup(text);
     s->font = font;
-    s->text_color = color;
+    s->text_color = (SDL_Color){0,0,0,255};
     s->draw = shape_draw;
     s->destroy = shape_destroy;
     s->handle_event = NULL;
@@ -155,24 +148,23 @@ static void button_handle_event(Shape *s_base, SDL_Event *ev) {
         b->hovered = point_in_shape(s, mx, my);
     } else if (ev->type == SDL_MOUSEBUTTONDOWN) {
         int mx = ev->button.x, my = ev->button.y;
-        if (ev->button.button == SDL_BUTTON_LEFT && point_in_shape(s, mx, my)) {
+        if (ev->button.button == SDL_BUTTON_LEFT && point_in_shape(s, mx, my))
             b->pressed = 1;
-        }
     } else if (ev->type == SDL_MOUSEBUTTONUP) {
         int mx = ev->button.x, my = ev->button.y;
         if (ev->button.button == SDL_BUTTON_LEFT) {
-            if (b->pressed && point_in_shape(s, mx, my)) {
+            if (b->pressed && point_in_shape(s, mx, my))
                 if (b->on_click)
                     b->on_click(b, b->base.userdata);
-            }
+                }
             b->pressed = 0;
-        }
     }
 }
 
 Button *button_create(int x,int y,int w,int h, const char *text, TTF_Font *font) {
     Button *b = malloc(sizeof(Button));
     Shape *s = &b->base;
+    s->visible = 1;
     s->x=x; s->y=y; s->w=w; s->h=h;
     s->radius = 10;
     s->bg = (SDL_Color){70,130,180,255}; /* steelblue */
@@ -190,8 +182,6 @@ Button *button_create(int x,int y,int w,int h, const char *text, TTF_Font *font)
     b->on_click = NULL;
     return b;
 }
-
-void button_set_onclick(Button *b, ButtonCallback cb) { b->on_click = cb; }
 
 /* --- InputField --- */
 
@@ -245,7 +235,7 @@ static void input_handle_event(Shape *s_base, SDL_Event *ev) {
     } else if (ev->type == SDL_KEYDOWN && in->focused) {
         if (ev->key.keysym.sym == SDLK_BACKSPACE) {
             if (in->cursor > 0) {
-                in->buffer[in->cursor--] = '\0';
+                in->buffer[--in->cursor] = '\0';
             }
         }
     }
@@ -254,6 +244,7 @@ static void input_handle_event(Shape *s_base, SDL_Event *ev) {
 InputField *inputfield_create(int x,int y,int w,int h,int length,const char *initial, TTF_Font *font) {
     InputField *in = malloc(sizeof(InputField));
     Shape *s = &in->base;
+    s->visible = 1;
     s->x=x; s->y=y; s->w=w; s->h=h;
     s->radius = 4;
     s->bg = (SDL_Color){255,255,255,255};

@@ -68,7 +68,7 @@ Screen* screen_sort_create(App *app, SortType type) {
 
     /* Titre */
     const char *algo_name = (type == SORT_SELECTION) ? "Tri par selection" : "Tri par fusion";
-    Shape *title = shape_create(300, 40, 200, 50, algo_name, (SDL_Color){44, 62, 80, 255}, app->font);
+    Shape *title = shape_create(300, 40, 200, 50, algo_name, app->bg, app->font);
 
     /* Champ de saisie */
     InputField *input = inputfield_create(200, 150, 400, 40, 30, "5,8,300,-4,15", app->font);
@@ -80,8 +80,8 @@ Screen* screen_sort_create(App *app, SortType type) {
     input->base.userdata = "input";
 
     /* Zone de texte pour le résultat */
-    Shape *output = shape_create(200, 300, 400, 40, "", (SDL_Color){255,255,255,255}, app->font);
-    output->bg = (SDL_Color){0,0,0,160};
+    Shape *output = shape_create(200, 300, 400, 40, "", (SDL_Color){0,0,0,160}, app->font);
+    output->bg = (SDL_Color){255,255,255,255};
     output->border = (SDL_Color){100,100,100,255};
     output->border_width = 1;
     output->userdata = "output";
@@ -93,7 +93,7 @@ Screen* screen_sort_create(App *app, SortType type) {
     btn_sort->hoverColor = (SDL_Color){200, 180, 30, 255}; // orange
     btn_sort->pressedColor = (SDL_Color){150, 130, 0, 255}; // orange sombre
     btn_sort->base.userdata = screen; // passe l'écran en userdata
-    button_set_onclick(btn_sort, on_sort);
+    btn_sort->on_click = on_sort;
 
     /* Bouton Retour */
     Button *btn_back = button_create(480, 350, 120, 50, "Retour", app->font);
@@ -101,7 +101,7 @@ Screen* screen_sort_create(App *app, SortType type) {
     btn_back->base.text_color = (SDL_Color){255,255,255,255};
     btn_back->hoverColor = (SDL_Color){200, 180, 30, 255}; // orange
     btn_back->pressedColor = (SDL_Color){150, 130, 0, 255}; // orange sombre
-    button_set_onclick(btn_back, on_back);
+    btn_back->on_click = on_back;
     btn_back->base.userdata = app;
 
     /* Ajout des éléments */

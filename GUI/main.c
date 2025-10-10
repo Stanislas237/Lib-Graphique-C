@@ -6,10 +6,10 @@
 int main(void) {
     App *app = app_create("Algorithmes de tri", 800, 600);
     int running = 1;
-    SDL_Event *ev;
+    SDL_Event ev;
 
-    while (running)
-        running = app_run(app, ev);
+    while (running == 1)
+        running = app_run(app, &ev);
     app_destroy(app);
     return 0;
 }

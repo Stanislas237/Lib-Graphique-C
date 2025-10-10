@@ -4,6 +4,11 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
+
+static void color_set(SDL_Renderer *r, SDL_Color c) {
+    SDL_SetRenderDrawColor(r, c.r, c.g, c.b, c.a);
+}
+
 typedef struct Shape Shape;
 typedef struct Button Button;
 typedef struct InputField InputField;
@@ -20,7 +25,7 @@ struct Shape {
     TTF_Font *font;
     void *userdata;
 
-    void (*draw)(Shape*, SDL_Renderer*);
+    void (*draw)(SDL_Renderer*, Shape*);
     void (*handle_event)(Shape*, SDL_Event*);
     void (*destroy)(Shape*);
 };
@@ -32,7 +37,6 @@ typedef void (*ButtonCallback)(Button*, void*);
 
 struct Button {
     Shape base;
-    char *label;
     int hovered;
     int pressed;
     SDL_Color hoverColor;
@@ -42,7 +46,6 @@ struct Button {
 };
 
 Button* button_create(int x, int y, int w, int h, const char *label, TTF_Font *font);
-void button_set_onclick(Button *b, ButtonCallback cb);
 
 SDL_Texture *render_text(SDL_Renderer *renderer, TTF_Font *font, const char *text, SDL_Rect *out_rect);
 

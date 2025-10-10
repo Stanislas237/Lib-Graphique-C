@@ -8,7 +8,7 @@ Screen* screen_sort_create(App *app, SortType type);
 /* === Callback : clic sur un bouton du menu === */
 static void on_menu_click(Button *b, void *userdata) {
     App *app = (App*)userdata;
-    if (strcmp(b->label, "Tri par selection") == 0)
+    if (strcmp(b->base.text, "Tri par selection") == 0)
         app_set_screen(app, screen_sort_create(app, SORT_SELECTION));
     else
         app_set_screen(app, screen_sort_create(app, SORT_MERGE));
@@ -25,7 +25,7 @@ Screen* screen_menu_create(App *app) {
     b_select->hoverColor = (SDL_Color){200, 180, 30, 255}; // orange
     b_select->pressedColor = (SDL_Color){150, 130, 0, 255}; // orange sombre
     b_select->base.userdata = app;
-    button_set_onclick(b_select, on_menu_click);
+    b_select->on_click = on_menu_click;
 
     /* Bouton Tri par fusion */
     Button *b_merge = button_create(300, 300, 200, 60, "Tri par fusion", app->font);
@@ -34,10 +34,10 @@ Screen* screen_menu_create(App *app) {
     b_merge->hoverColor = (SDL_Color){200, 180, 30, 255}; // orange
     b_merge->pressedColor = (SDL_Color){150, 130, 0, 255}; // orange sombre
     b_merge->base.userdata = app;
-    button_set_onclick(b_merge, on_menu_click);
+    b_merge->on_click = on_menu_click;
 
     /* Texte du titre */
-    Shape *title = shape_create(260, 80, 500, 80, "Choisissez un algorithme de tri", (SDL_Color){40,40,40,255}, app->font);
+    Shape *title = shape_create(150, 80, 500, 50, "Choisissez un algorithme de tri", app->bg, app->font);
 
     /* Ajout des �l�ments � l��cran */
     screen_add(screen, title);

@@ -1,5 +1,24 @@
 #include "app.h"
 
+void WindowResizeHandler(SDL_Event *e, SDL_Window* window){
+    if (e->window.event == SDL_WINDOWEVENT_RESIZED) {
+        SDL_GetWindowSize(window, &SCREEN_WIDTH, &SCREEN_HEIGHT);
+
+        if (SCREEN_WIDTH < MIN_SCREEN_WIDTH)
+            SCREEN_WIDTH = MIN_SCREEN_WIDTH;
+        else if (SCREEN_WIDTH > MAX_SCREEN_WIDTH)
+            SCREEN_WIDTH = MAX_SCREEN_WIDTH;
+
+        if (SCREEN_HEIGHT < MIN_SCREEN_HEIGHT)
+            SCREEN_HEIGHT = MIN_SCREEN_HEIGHT;
+        else if (SCREEN_HEIGHT > MAX_SCREEN_HEIGHT)
+            SCREEN_HEIGHT = MAX_SCREEN_HEIGHT;
+
+        // Redimensionner la fenêtre si nécessaire
+        SDL_SetWindowSize(window, SCREEN_WIDTH, SCREEN_HEIGHT);
+    }
+}
+
 /* === Crée l'application === */
 App* app_create(const char *title, int w, int h) {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -34,6 +53,7 @@ App* app_create(const char *title, int w, int h) {
         return NULL;
     }
 
+    app->bg = (SDL_Color){240, 240, 240, 255};
     app_set_screen(app, screen_menu_create(app));
     return app;
 }
@@ -48,16 +68,23 @@ void app_set_screen(App *app, Screen *screen) {
 /* === Boucle principale === */
 int app_run(App *app, SDL_Event *e) {
     if (!app)
-        return 1;
+        return 0;
 
-    while (SDL_PollEvent(&e))
-        if (e->type == SDL_QUIT)
-            return 0;
-        else if (app->screen)
-            screen_handle_event(app->screen, e);
+    while (SDL_PollEvent(e))
+        switch (e->type){
+            case SDL_QUIT:
+                return 0;
+            case SDL_WINDOWEVENT:
+                // Vérifier si l'événement est un redimensionnement de la fenêtre
+                WindowResizeHandler(e, app->window);
+                break;
+            default:
+                if (app->screen)
+                    screen_handle_event(app->screen, e);
+        }
 
     // Couleur d’arrière-plan
-    SDL_SetRenderDrawColor(app->renderer, 240, 240, 240, 255);
+    color_set(app->renderer, app->bg);
     SDL_RenderClear(app->renderer);
 
     if (app->screen)

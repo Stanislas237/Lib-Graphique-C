@@ -9,6 +9,7 @@ typedef struct App {
     SDL_Renderer *renderer;
     TTF_Font *font;
     Screen *screen;
+    SDL_Color bg;
 } App;
 
 App* app_create(const char *title, int w, int h);
