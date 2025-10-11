@@ -465,7 +465,7 @@
 	<SDL2/SDL.h>
 	<SDL2/SDL_ttf.h>
 
-1760114585 source:d:\my files\documents\github\lib-graphique-c\gui\main.c
+1760162084 source:d:\my files\documents\github\lib-graphique-c\gui\main.c
 	"app.h"
 
 1760116408 d:\my files\documents\github\lib-graphique-c\gui\include\sdl2\sdl_main.h
@@ -834,23 +834,22 @@
 	"begin_code.h"
 	"close_code.h"
 
-1760086244 source:d:\my files\documents\github\lib-graphique-c\gui\algos.c
+1760165765 source:d:\my files\documents\github\lib-graphique-c\gui\algos.c
 	<stdio.h>
 	<stdlib.h>
 
-1760118768 d:\my files\documents\github\lib-graphique-c\gui\app.h
-	"utils.h"
+1760162092 d:\my files\documents\github\lib-graphique-c\gui\app.h
 	"screen.h"
 
 1760119093 source:d:\my files\documents\github\lib-graphique-c\gui\app.c
 	"app.h"
 
-1760119273 source:d:\my files\documents\github\lib-graphique-c\gui\menu.c
+1760162059 source:d:\my files\documents\github\lib-graphique-c\gui\menu.c
 	"app.h"
 	<stdlib.h>
 	<string.h>
 
-1760118452 source:d:\my files\documents\github\lib-graphique-c\gui\sort.c
+1760165600 source:d:\my files\documents\github\lib-graphique-c\gui\sort.c
 	"app.h"
 	<stdlib.h>
 	<stdio.h>

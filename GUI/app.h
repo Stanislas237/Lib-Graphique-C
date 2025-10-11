@@ -1,7 +1,7 @@
 #ifndef APP_H
 #define APP_H
 
-#include "utils.h"
+static int INPUT_ACTIVE_COUNT = 0;
 #include "screen.h"
 
 typedef struct App {

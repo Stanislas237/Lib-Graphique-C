@@ -3,9 +3,6 @@
 #include <stdio.h>
 #include <string.h>
 
-/* D�claration de la fonction screen_menu_create */
-Screen* screen_menu_create(App *app, Screen *Sort);
-
 /* === Callback : bouton Retour === */
 static void on_back(Button *b, void *userdata) {
     App *app = (App*)userdata;
@@ -18,7 +15,6 @@ static void on_sort(Button *b, void *userdata) {
 
     InputField *input = NULL;
     Shape *output = NULL;
-    SortType *type_ptr = NULL;
 
     /* R�cup�re les pointeurs utiles stock�s dans userdata des formes */
     for (int i = 0; i < screen->count; i++) {
@@ -43,14 +39,31 @@ static void on_sort(Button *b, void *userdata) {
         tok = strtok(NULL, " ,;+");
     }
 
-    /* Ex�cute le tri selon le type */
-    if (!strcmp(screen->title, "Tri par selection")){
-        printf("Performing Selection Sort on %d elements\n", n);
-        selection_sort(arr, n);
-    }
-    else{
-        printf("Performing Merge Sort on %d elements\n", n);
-        merge_sort(arr, n);
+    /* Exécute le tri selon le type */
+    int type_tri = strcmp(screen->title, "Tri par selection");
+    int forme_tri = strcmp(b->base.text, "Tri récursif");
+    
+    if (type_tri == 0){ // Tri par sélection
+        if (forme_tri == 0){ // Tri récursif
+            printf("Tri par selection recursif sur %d elements\n", n);
+            selection_sort_rec(arr, n);
+        } else { // Tri itératif
+            printf("Tri par selection iteratif sur %d elements\n", n);
+            selection_sort_iter(arr, n);
+        }
+    } else { // Tri par fusion
+        if (forme_tri == 0) { // Tri récursif
+            printf("Tri par fusion recursif sur %d elements\n", n);
+            
+            if (n <= 1) return;
+            int *tmp = malloc(n * sizeof(int));
+            if (!tmp) return;
+            merge_sort_rec(arr, 0, n - 1, tmp);
+            free(tmp);
+        } else { // Tri itératif
+            printf("Tri par fusion iteratif sur %d elements\n", n);
+            merge_sort_iter(arr, n);
+        }
     }
 
     /* Construit la chaîne de sortie */
@@ -87,8 +100,7 @@ Screen* screen_sort_create(App *app, Screen *Menu) {
     Screen *screen = screen_create(Menu);
 
     /* Titre */
-    const char *algo_name = (CURRENT_SORT_TYPE == SORT_SELECTION) ? "Tri par selection" : "Tri par fusion";
-    Shape *title = shape_create(150, 10, 200, 60, algo_name, app->bg, app->font);
+    Shape *title = shape_create(150, 10, 200, 60, screen->title, app->bg, app->font);
     title->userdata = screen;
     title->reset = set_title_text;
 
@@ -108,17 +120,26 @@ Screen* screen_sort_create(App *app, Screen *Menu) {
     output->userdata = "output";
     output->reset = set_output_empty;
 
-    /* Bouton Trier */
-    Button *btn_sort = button_create(90, 200, 120, 50, "Trier", app->font);
-    btn_sort->base.bg = (SDL_Color){155, 89, 182, 255}; // violet
-    btn_sort->base.text_color = (SDL_Color){255,255,255,255};
-    btn_sort->hoverColor = (SDL_Color){200, 180, 30, 255}; // orange
-    btn_sort->pressedColor = (SDL_Color){150, 130, 0, 255}; // orange sombre
-    btn_sort->base.userdata = screen; // passe l'écran en userdata
-    btn_sort->on_click = on_sort;
+    /* Bouton Tri itératif */
+    Button *btn_sort_iterative = button_create(50, 200, 100, 50, "Tri itératif", app->font);
+    btn_sort_iterative->base.bg = (SDL_Color){155, 89, 182, 255}; // violet
+    btn_sort_iterative->base.text_color = (SDL_Color){255,255,255,255};
+    btn_sort_iterative->hoverColor = (SDL_Color){200, 180, 30, 255}; // orange
+    btn_sort_iterative->pressedColor = (SDL_Color){150, 130, 0, 255}; // orange sombre
+    btn_sort_iterative->base.userdata = screen; // passe l'écran en userdata
+    btn_sort_iterative->on_click = on_sort;
+
+    /* Bouton Tri récursif */
+    Button *btn_sort_recursive = button_create(190, 200, 120, 50, "Tri récursif", app->font);
+    btn_sort_recursive->base.bg = (SDL_Color){155, 89, 182, 255}; // violet
+    btn_sort_recursive->base.text_color = (SDL_Color){255,255,255,255};
+    btn_sort_recursive->hoverColor = (SDL_Color){200, 180, 30, 255}; // orange
+    btn_sort_recursive->pressedColor = (SDL_Color){150, 130, 0, 255}; // orange sombre
+    btn_sort_recursive->base.userdata = screen; // passe l'écran en userdata
+    btn_sort_recursive->on_click = on_sort;
 
     /* Bouton Retour */
-    Button *btn_back = button_create(300, 200, 120, 50, "Retour", app->font);
+    Button *btn_back = button_create(350, 200, 100, 50, "Retour", app->font);
     btn_back->base.bg = (SDL_Color){231, 76, 60, 255}; // rouge
     btn_back->base.text_color = (SDL_Color){255,255,255,255};
     btn_back->hoverColor = (SDL_Color){200, 180, 30, 255}; // orange
@@ -130,7 +151,8 @@ Screen* screen_sort_create(App *app, Screen *Menu) {
     screen_add(screen, title);
     screen_add(screen, (Shape*)input);
     screen_add(screen, output);
-    screen_add(screen, (Shape*)btn_sort);
+    screen_add(screen, (Shape*)btn_sort_iterative);
+    screen_add(screen, (Shape*)btn_sort_recursive);
     screen_add(screen, (Shape*)btn_back);
 
     return screen;
