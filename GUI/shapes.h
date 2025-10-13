@@ -13,6 +13,12 @@ typedef struct Shape Shape;
 typedef struct Button Button;
 typedef struct InputField InputField;
 
+static void filledCircleRGBA(SDL_Renderer *renderer, int x0, int y0, int radius);
+static void fill_rounded_rect(SDL_Renderer *renderer, SDL_Rect r, int radius);
+static int point_in_shape(Shape *s, int px, int py);
+static void draw_rect_border(SDL_Renderer *renderer, SDL_Rect r, int bw);
+SDL_Texture *render_text(SDL_Renderer *renderer, TTF_Font *font, const char *text, SDL_Color text_color, SDL_Rect *out_rect);
+
 /* --- Base --- */
 struct Shape {
     int x, y, w, h, radius;
@@ -32,6 +38,10 @@ struct Shape {
 };
 
 Shape *shape_create(int x,int y,int w,int h, const char *text, SDL_Color color, TTF_Font *font);
+static void draw_shape_text(SDL_Renderer *renderer, Shape *s);
+static void render_shape(SDL_Renderer *renderer, Shape *s, SDL_Color bg);
+static void shape_draw(SDL_Renderer *renderer, Shape *s);
+static void shape_destroy(Shape *s);
 
 /* --- Bouton --- */
 typedef void (*ButtonCallback)(Button*, void*);
@@ -47,13 +57,13 @@ struct Button {
 };
 
 Button* button_create(int x, int y, int w, int h, const char *label, TTF_Font *font);
-
-SDL_Texture *render_text(SDL_Renderer *renderer, TTF_Font *font, const char *text, SDL_Rect *out_rect);
+static void button_draw(SDL_Renderer *renderer, Shape *s);
+static void button_reset(Shape* s);
+static void button_handle_event(Shape *s, SDL_Event *ev);
 
 /* --- Champ de saisie --- */
 struct InputField {
     Shape base;
-    char *buffer;
     int cursor;
     int length;
     int focused;
@@ -61,4 +71,6 @@ struct InputField {
 };
 
 InputField *inputfield_create(int x,int y,int w,int h,int length,const char *initial, TTF_Font *font);
+static void input_draw(SDL_Renderer *renderer, Shape *s_base);
+static void input_handle_event(Shape *s_base, SDL_Event *ev);
 #endif

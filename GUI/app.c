@@ -88,6 +88,8 @@ void app_destroy(App *app) {
 
     if (app->screen)
         screen_destroy(app->screen);
+    if (app->screen->next)
+        screen_destroy(app->screen->next);
     if (app->font)
         TTF_CloseFont(app->font);
     if (app->renderer)

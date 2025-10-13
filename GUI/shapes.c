@@ -43,6 +43,10 @@ static void fill_rounded_rect(SDL_Renderer *renderer, SDL_Rect r, int radius) {
     filledCircleRGBA(renderer, r.x + r.w - radius - 1, r.y + r.h - radius - 1, radius);
 }
 
+static int point_in_shape(Shape *s, int px, int py) {
+    return (px >= s->x && px <= s->x + s->w && py >= s->y && py <= s->y + s->h);
+}    
+
 /* Draw border (approx) */
 static void draw_rect_border(SDL_Renderer *renderer, SDL_Rect r, int bw) {
     if (bw <= 0) return;
@@ -53,42 +57,10 @@ static void draw_rect_border(SDL_Renderer *renderer, SDL_Rect r, int bw) {
     }
 }
 
-/* center text inside shape */
-static void draw_shape_text(SDL_Renderer *renderer, Shape *s) {
-    if (!s->text || !s->font) return;
-    SDL_Rect rect;
-    SDL_Texture *tex = render_text(renderer, s->font, s->text, &rect);
-    if (!tex) return;
-    int tx = s->x + (s->w - rect.w)/2;
-    int ty = s->y + (s->h - rect.h)/2;
-    SDL_Rect dest = {tx, ty, rect.w, rect.h};
-    SDL_SetTextureBlendMode(tex, SDL_BLENDMODE_BLEND);
-    SDL_RenderCopy(renderer, tex, NULL, &dest);
-    SDL_DestroyTexture(tex);
-}
-
-static void shape_draw(SDL_Renderer *renderer, Shape *s) {
-    if (!s || !s->visible) return;
-    SDL_Rect r = {s->x, s->y, s->w, s->h};
-    color_set(renderer, s->bg);
-    fill_rounded_rect(renderer, r, s->radius);
-    color_set(renderer, s->border);
-    draw_rect_border(renderer, r, s->border_width);
-    draw_shape_text(renderer, s);
-}
-
-static void shape_destroy(Shape *s) {
-    if (!s) return;
-    if (s->text)
-        free(s->text);
-    free(s);
-}
-
-
 /* render text to texture and output rect with width/height */
-SDL_Texture *render_text(SDL_Renderer *renderer, TTF_Font *font, const char *text, SDL_Rect *out_rect) {
+SDL_Texture *render_text(SDL_Renderer *renderer, TTF_Font *font, const char *text, SDL_Color text_color, SDL_Rect *out_rect) {
     if (!text || !font) return NULL;
-    SDL_Surface *surf = TTF_RenderUTF8_Blended(font, text, (SDL_Color){0,0,0,255});
+    SDL_Surface *surf = TTF_RenderUTF8_Blended(font, text, text_color);
     if (!surf) return NULL;
     SDL_Texture *tex = SDL_CreateTextureFromSurface(renderer, surf);
     if (out_rect) {
@@ -98,6 +70,7 @@ SDL_Texture *render_text(SDL_Renderer *renderer, TTF_Font *font, const char *tex
     SDL_FreeSurface(surf);
     return tex;
 }
+
 
 /* --- Shape base --- */
 Shape *shape_create(int x,int y,int w,int h, const char *text, SDL_Color bg_color, TTF_Font *font) {
@@ -117,18 +90,23 @@ Shape *shape_create(int x,int y,int w,int h, const char *text, SDL_Color bg_colo
     return s;
 }
 
-/* --- Button --- */
-static void button_draw(SDL_Renderer *renderer, Shape *s_base) {
-    Button *b = (Button*)s_base;
-    Shape *s = &b->base;
+/* center text inside shape */
+static void draw_shape_text(SDL_Renderer *renderer, Shape *s) {
+    if (!s->text || !s->font) return;
+    SDL_Rect rect;
+    SDL_Texture *tex = render_text(renderer, s->font, s->text, /*s->text_color*/ (SDL_Color){0,0,0,255}, &rect);
+    if (!tex) return;
+    int tx = s->x + (s->w - rect.w)/2;
+    int ty = s->y + (s->h - rect.h)/2;
+    SDL_Rect dest = {tx, ty, rect.w, rect.h};
+    SDL_SetTextureBlendMode(tex, SDL_BLENDMODE_BLEND);
+    SDL_RenderCopy(renderer, tex, NULL, &dest);
+    SDL_DestroyTexture(tex);
+}
+
+static void render_shape(SDL_Renderer *renderer, Shape *s, SDL_Color bg) {
+    if (!s || !s->visible) return;
     SDL_Rect r = {s->x, s->y, s->w, s->h};
-
-    SDL_Color bg = s->bg;
-    if (b->hovered)
-        bg = b->hoverColor;
-    if (b->pressed)
-        bg = b->pressedColor;
-
     color_set(renderer, bg);
     fill_rounded_rect(renderer, r, s->radius);
     color_set(renderer, s->border);
@@ -136,37 +114,19 @@ static void button_draw(SDL_Renderer *renderer, Shape *s_base) {
     draw_shape_text(renderer, s);
 }
 
-static void button_reset(Shape* s_base) {
-    Button *b = (Button*)s_base;
-    b->pressed = 0;
-    b->hovered = 0;
+static void shape_draw(SDL_Renderer *renderer, Shape *s) {
+    render_shape(renderer, s, s->bg);
 }
 
-static int point_in_shape(Shape *s, int px, int py) {
-    return (px >= s->x && px <= s->x + s->w && py >= s->y && py <= s->y + s->h);
+static void shape_destroy(Shape *s) {
+    if (!s) return;
+    if (s->text)
+        free(s->text);
+    free(s);
 }
 
-static void button_handle_event(Shape *s_base, SDL_Event *ev) {
-    Button *b = (Button*)s_base;
-    Shape *s = &b->base;
-    if (ev->type == SDL_MOUSEMOTION) {
-        int mx = ev->motion.x, my = ev->motion.y;
-        b->hovered = point_in_shape(s, mx, my);
-    } else if (ev->type == SDL_MOUSEBUTTONDOWN) {
-        int mx = ev->button.x, my = ev->button.y;
-        if (ev->button.button == SDL_BUTTON_LEFT && point_in_shape(s, mx, my))
-            b->pressed = 1;
-    } else if (ev->type == SDL_MOUSEBUTTONUP) {
-        int mx = ev->button.x, my = ev->button.y;
-        if (ev->button.button == SDL_BUTTON_LEFT) {
-            if (b->pressed && point_in_shape(s, mx, my))
-                if (b->on_click)
-                    b->on_click(b, b->base.userdata);
-                }
-            b->pressed = 0;
-    }
-}
 
+/* --- Button --- */
 Button *button_create(int x,int y,int w,int h, const char *text, TTF_Font *font) {
     Button *b = malloc(sizeof(Button));
     Shape *s = &b->base;
@@ -190,28 +150,82 @@ Button *button_create(int x,int y,int w,int h, const char *text, TTF_Font *font)
     return b;
 }
 
+static void button_draw(SDL_Renderer *renderer, Shape *s_base) {
+    Button *b = (Button*)s_base;
+    Shape *s = &b->base;
+    SDL_Rect r = {s->x, s->y, s->w, s->h};
+
+    SDL_Color bg = s->bg;
+    if (b->hovered)
+        bg = b->hoverColor;
+    if (b->pressed)    
+        bg = b->pressedColor;
+
+    color_set(renderer, bg);    
+    fill_rounded_rect(renderer, r, s->radius);
+    color_set(renderer, s->border);
+    draw_rect_border(renderer, r, s->border_width);
+    draw_shape_text(renderer, s);
+}    
+
+static void button_reset(Shape* s_base) {
+    Button *b = (Button*)s_base;
+    b->pressed = 0;
+    b->hovered = 0;
+}    
+
+static void button_handle_event(Shape *s_base, SDL_Event *ev) {
+    Button *b = (Button*)s_base;
+    Shape *s = &b->base;
+    if (ev->type == SDL_MOUSEMOTION) {
+        int mx = ev->motion.x, my = ev->motion.y;
+        b->hovered = point_in_shape(s, mx, my);
+    } else if (ev->type == SDL_MOUSEBUTTONDOWN) {
+        int mx = ev->button.x, my = ev->button.y;
+        if (ev->button.button == SDL_BUTTON_LEFT && point_in_shape(s, mx, my))
+            b->pressed = 1;
+    } else if (ev->type == SDL_MOUSEBUTTONUP) {    
+        int mx = ev->button.x, my = ev->button.y;
+        if (ev->button.button == SDL_BUTTON_LEFT) {
+            if (b->pressed && point_in_shape(s, mx, my))
+                if (b->on_click)
+                    b->on_click(b, b->base.userdata);
+                }    
+            b->pressed = 0;    
+    }        
+}    
+
+
 /* --- InputField --- */
+InputField *inputfield_create(int x,int y,int w,int h,int length,const char *initial, TTF_Font *font) {
+    InputField *in = malloc(sizeof(InputField));
+    Shape *s = &in->base;
+    s->visible = 1;
+    s->x=x; s->y=y; s->w=w; s->h=h;
+    s->radius = 4;
+    s->bg = (SDL_Color){255,255,255,255};
+    s->border = (SDL_Color){120,120,120,255};
+    s->border_width = 1;
+    s->font = font;
+    s->text_color = (SDL_Color){0,0,0,255};
+    s->draw = input_draw;
+    s->handle_event = input_handle_event;
+    s->destroy = shape_destroy;
+
+    in->length = length;
+    in->base.text = malloc(length * sizeof(char));
+    if (initial) {
+        strncpy(in->base.text, initial, length-1);
+        in->cursor = strlen(in->base.text);
+    } else in->cursor = 0;
+    in->focused = 0;
+    return in;
+}
 
 static void input_draw(SDL_Renderer *renderer, Shape *s_base) {
     InputField *in = (InputField*)s_base;
     Shape *s = &in->base;
-    SDL_Rect r = {s->x, s->y, s->w, s->h};
-    color_set(renderer, in->focused ? in->color_focused : s->bg);
-    fill_rounded_rect(renderer, r, s->radius);
-    color_set(renderer, s->border);
-    draw_rect_border(renderer, r, s->border_width);
-
-    /* render text left-aligned with padding */
-    if (in->buffer && s->font) {
-        SDL_Surface *surf = TTF_RenderUTF8_Blended(s->font, in->buffer, (SDL_Color){s->text_color.r, s->text_color.g, s->text_color.b, s->text_color.a});
-        if (surf) {
-            SDL_Texture *tex = SDL_CreateTextureFromSurface(renderer, surf);
-            SDL_Rect dest = {s->x + 6, s->y + (s->h - surf->h)/2, surf->w, surf->h};
-            SDL_RenderCopy(renderer, tex, NULL, &dest);
-            SDL_DestroyTexture(tex);
-            SDL_FreeSurface(surf);
-        }
-    }
+    render_shape(renderer, s, in->focused ? in->color_focused : s->bg);
 }
 
 static void input_handle_event(Shape *s_base, SDL_Event *ev) {
@@ -236,39 +250,15 @@ static void input_handle_event(Shape *s_base, SDL_Event *ev) {
         }
     } else if (ev->type == SDL_TEXTINPUT && in->focused) {
         if (in->cursor < in->length){
-            in->buffer[in->cursor++] = ev->text.text[0];
-            in->buffer[in->cursor] = '\0';
+            in->base.text[in->cursor++] = ev->text.text[0];
+            in->base.text[in->cursor] = '\0';
         }
     } else if (ev->type == SDL_KEYDOWN && in->focused) {
         if (ev->key.keysym.sym == SDLK_BACKSPACE) {
             if (in->cursor > 0) {
-                in->buffer[--in->cursor] = '\0';
+                in->base.text[--in->cursor] = '\0';
             }
         }
     }
 }
 
-InputField *inputfield_create(int x,int y,int w,int h,int length,const char *initial, TTF_Font *font) {
-    InputField *in = malloc(sizeof(InputField));
-    Shape *s = &in->base;
-    s->visible = 1;
-    s->x=x; s->y=y; s->w=w; s->h=h;
-    s->radius = 4;
-    s->bg = (SDL_Color){255,255,255,255};
-    s->border = (SDL_Color){120,120,120,255};
-    s->border_width = 1;
-    s->font = font;
-    s->text_color = (SDL_Color){0,0,0,255};
-    s->draw = input_draw;
-    s->handle_event = input_handle_event;
-    s->destroy = shape_destroy;
-
-    in->length = length;
-    in->buffer = malloc(length * sizeof(char));
-    if (initial) {
-        strncpy(in->buffer, initial, length-1);
-        in->cursor = strlen(in->buffer);
-    } else in->cursor = 0;
-    in->focused = 0;
-    return in;
-}

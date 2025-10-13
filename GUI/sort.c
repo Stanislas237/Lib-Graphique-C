@@ -32,8 +32,8 @@ static void on_sort(Button *b, void *userdata) {
     int arr[128];
     int n = 0;
     char temp[256];
-    strcpy(temp, input->buffer);
-    char *tok = strtok(temp, " ,-;+");
+    strcpy(temp, input->base.text);
+    char *tok = strtok(temp, " ,;+");
     while (tok && n < 128) {
         arr[n++] = atoi(tok);
         tok = strtok(NULL, " ,;+");
@@ -42,7 +42,7 @@ static void on_sort(Button *b, void *userdata) {
     /* Exécute le tri selon le type */
     int type_tri = strcmp(screen->title, "Tri par selection");
     int forme_tri = strcmp(b->base.text, "Tri récursif");
-    
+
     if (type_tri == 0){ // Tri par sélection
         if (forme_tri == 0){ // Tri récursif
             printf("Tri par selection recursif sur %d elements\n", n);
@@ -54,12 +54,13 @@ static void on_sort(Button *b, void *userdata) {
     } else { // Tri par fusion
         if (forme_tri == 0) { // Tri récursif
             printf("Tri par fusion recursif sur %d elements\n", n);
-            
-            if (n <= 1) return;
-            int *tmp = malloc(n * sizeof(int));
-            if (!tmp) return;
-            merge_sort_rec(arr, 0, n - 1, tmp);
-            free(tmp);
+
+            if (n > 1){
+                int *tmp = malloc(n * sizeof(int));
+                if (!tmp) return;
+                merge_sort_rec(arr, 0, n - 1, tmp);
+                free(tmp);
+            }
         } else { // Tri itératif
             printf("Tri par fusion iteratif sur %d elements\n", n);
             merge_sort_iter(arr, n);
