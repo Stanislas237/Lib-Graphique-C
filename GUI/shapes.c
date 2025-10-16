@@ -5,14 +5,6 @@
 #include <stdio.h>
 #include <ctype.h>
 
-/* helpers MAX/MIN */
-#ifndef MAX
-#define MAX(a,b) ((a)>(b)?(a):(b))
-#endif
-#ifndef MIN
-#define MIN(a,b) ((a)<(b)?(a):(b))
-#endif
-
 /* filled circle drawing (na�f) -- used for rounded corners */
 static void filledCircleRGBA(SDL_Renderer *renderer, int x0, int y0, int radius) {
     for (int y = -radius; y <= radius; y++) {
