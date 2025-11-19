@@ -2,7 +2,6 @@
 #define APP_H
 
 static int INPUT_ACTIVE_COUNT = 0;
-#include <stdio.h>
 #include "screen.h"
 #include "file.h"
 
@@ -10,9 +9,10 @@ typedef struct App {
     SDL_Window *window;
     SDL_Renderer *renderer;
     TTF_Font *font;
-    Queue *queue;
-    Screen *screen;
+    Queue *main_queue;
     SDL_Color bg;
+    Screen *screen;
+    InputField *input;
 } App;
 
 App* app_create(const char *title, int w, int h);

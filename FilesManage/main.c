@@ -10,3 +10,4 @@ int main() {
     app_destroy(app);
     return 0;
 }
+

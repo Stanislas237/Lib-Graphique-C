@@ -133,7 +133,6 @@ Button *button_create(int x,int y,int w,int h, const char *text, TTF_Font *font)
     s->text_color = (SDL_Color){255,255,255,255};
     s->draw = button_draw;
     s->handle_event = button_handle_event;
-    s->reset = button_reset;
     s->destroy = shape_destroy;
     s->userdata = NULL;
     b->hovered = 0;
@@ -158,12 +157,6 @@ static void button_draw(SDL_Renderer *renderer, Shape *s_base) {
     color_set(renderer, s->border);
     draw_rect_border(renderer, r, s->border_width);
     draw_shape_text(renderer, s);
-}
-
-static void button_reset(Shape* s_base) {
-    Button *b = (Button*)s_base;
-    b->pressed = 0;
-    b->hovered = 0;
 }
 
 static void button_handle_event(Shape *s_base, SDL_Event *ev) {

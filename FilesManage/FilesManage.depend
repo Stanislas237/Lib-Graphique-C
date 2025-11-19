@@ -1,16 +1,15 @@
 # depslib dependency file v1.0
-1763509875 source:d:\my files\documents\github\lib-graphique-c\filesmanage\main.c
+1763538211 source:d:\my files\documents\github\lib-graphique-c\filesmanage\main.c
 	"app.h"
 
-1763512985 d:\my files\documents\github\lib-graphique-c\filesmanage\app.h
-	<stdio.h>
+1763535254 d:\my files\documents\github\lib-graphique-c\filesmanage\app.h
 	"screen.h"
 	"file.h"
 
-1763504938 d:\my files\documents\github\lib-graphique-c\filesmanage\screen.h
+1763533969 d:\my files\documents\github\lib-graphique-c\filesmanage\screen.h
 	"shapes.h"
 
-1763507984 d:\my files\documents\github\lib-graphique-c\filesmanage\shapes.h
+1763534103 d:\my files\documents\github\lib-graphique-c\filesmanage\shapes.h
 	<SDL2/SDL.h>
 	<SDL2/SDL_ttf.h>
 
@@ -461,25 +460,6 @@
 	"begin_code.h"
 	"close_code.h"
 
-1760119178 source:d:\my files\documents\github\lib-graphique-c\filesmanage\screen.c
-	"screen.h"
-	<stdlib.h>
-	<stdio.h>
-
-1763507997 source:d:\my files\documents\github\lib-graphique-c\filesmanage\shapes.c
-	"app.h"
-	<stdlib.h>
-	<math.h>
-	<string.h>
-	<stdio.h>
-	<ctype.h>
-
-1763510151 source:d:\my files\documents\github\lib-graphique-c\filesmanage\app.c
-	"app.h"
-
-1763513417 source:d:\my files\documents\github\lib-graphique-c\filesmanage\mainscreen.c
-	"app.h"
-
 1763513595 d:\my files\documents\github\lib-graphique-c\filesmanage\file.h
 	<stdio.h>
 	<stdlib.h>
@@ -487,7 +467,26 @@
 	<stdbool.h>
 	"screen.h"
 
-1763514089 source:d:\my files\documents\github\lib-graphique-c\filesmanage\file.c
+1763533939 source:d:\my files\documents\github\lib-graphique-c\filesmanage\screen.c
+	"screen.h"
+	<stdlib.h>
+	<stdio.h>
+
+1763534215 source:d:\my files\documents\github\lib-graphique-c\filesmanage\app.c
+	"app.h"
+
+1763534226 source:d:\my files\documents\github\lib-graphique-c\filesmanage\shapes.c
+	"app.h"
+	<stdlib.h>
+	<math.h>
+	<string.h>
+	<stdio.h>
+	<ctype.h>
+
+1763534234 source:d:\my files\documents\github\lib-graphique-c\filesmanage\file.c
 	"file.h"
+	"app.h"
+
+1763535463 source:d:\my files\documents\github\lib-graphique-c\filesmanage\mainscreen.c
 	"app.h"
 

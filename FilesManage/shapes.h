@@ -34,7 +34,6 @@ struct Shape {
     void (*draw)(SDL_Renderer*, Shape*);
     void (*handle_event)(Shape*, SDL_Event*);
     void (*destroy)(Shape*);
-    void (*reset)(Shape*);
 };
 
 Shape *shape_create(int x,int y,int w,int h, const char *text, SDL_Color color, TTF_Font *font);
@@ -58,7 +57,6 @@ struct Button {
 
 Button* button_create(int x, int y, int w, int h, const char *label, TTF_Font *font);
 static void button_draw(SDL_Renderer *renderer, Shape *s);
-static void button_reset(Shape* s);
 static void button_handle_event(Shape *s, SDL_Event *ev);
 
 /* --- Champ de saisie --- */

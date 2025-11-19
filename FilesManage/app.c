@@ -1,4 +1,5 @@
 #include "app.h"
+
 Screen* screen_file_create(App *app);
 
 /* === Cr�e l'application === */
@@ -34,18 +35,12 @@ App* app_create(const char *title, int w, int h) {
         app_destroy(app);
         return NULL;
     }
-    printf("Bonjour");
 
     app->bg = (SDL_Color){240, 240, 240, 255};
-    app_set_screen(app, screen_file_create(app));
-    return app;
-}
 
-/* === Change l��cran courant === */
-void app_set_screen(App *app, Screen *screen) {
-    if (!app) return;
-    app->screen = screen;
-    screen_clear(app->screen);
+    Screen *mainscreen = screen_file_create(app);
+    app->screen = mainscreen;
+    return app;
 }
 
 /* === Boucle principale === */
@@ -83,10 +78,8 @@ void app_destroy(App *app) {
 
     if (app->screen)
         screen_destroy(app->screen);
-    if (app->screen->next)
-        screen_destroy(app->screen->next);
-    if (app->queue)
-        queue_destroy(app->queue);
+    if (app->main_queue)
+        queue_destroy(app->main_queue);
     if (app->font)
         TTF_CloseFont(app->font);
     if (app->renderer)

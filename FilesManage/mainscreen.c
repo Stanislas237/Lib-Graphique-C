@@ -3,35 +3,33 @@
 static void on_enqueue(Button *b, void *userdata) {
     App *app = (App*)userdata;
     Screen *screen = app->screen;
-    Queue *q = app->queue;
-    InputField *input = NULL;
+    Queue *q = app->main_queue;
+    InputField *input = app->input;
 
-    for (int i = 0; i < screen->count; i++) {
-        Shape *s = screen->elements[i];
-        if (!s) continue;
-        if (s->userdata && strcmp((char*)s->userdata, "input") == 0)
-            input = (InputField*)s;
-    }
-    if (!input) return;
+    if (input->base.text[0] == '\0')
+        return;
 
     int input_value = atoi(input->base.text);
     enqueue(q, input_value);
     queue_draw(app);
+
+    input->base.text[0] = '\0';
+    input->cursor = 0;
 }
 
 static void on_dequeue(Button *b, void *userdata) {
     App *app = (App*)userdata;
-    Queue *q = app->queue;
+    Queue *q = app->main_queue;
     dequeue(q);
     queue_draw(app);
 }
 
 Screen* screen_file_create(App *app) {
-    Screen *screen = screen_create(NULL);
-    app->queue = queue_create(10);
+    Screen *screen = screen_create();
+    app->main_queue = queue_create(10);
 
     /* Texte du titre */
-    Shape *title = shape_create(100, 30, 300, 50, "Gestion d'une file dynamique", app->bg, app->font);
+    Shape *title = shape_create(100, 30, 300, 50, "Gestion d'une file statique", app->bg, app->font);
 
     /* Champ de saisie */
     InputField *input = inputfield_create(100, 170, 50, 40, 3, "", app->font);
@@ -65,6 +63,7 @@ Screen* screen_file_create(App *app) {
     screen_add(screen, (Shape*)enqueue);
     screen_add(screen, (Shape*)dequeue);
 
+    app->input = input;
     return screen;
 }
 

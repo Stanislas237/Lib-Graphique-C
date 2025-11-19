@@ -22,7 +22,7 @@ void queue_destroy(Queue *q){
 
 void queue_draw(App *app){
     int startX = 50, startY = 100, boxW = 40, boxH = 30;
-    Queue *q = app->queue;
+    Queue *q = app->main_queue;
     Screen *s = app->screen;
 
     for(int i = 4; i < s->count; i++)
@@ -62,4 +62,3 @@ int front(Queue *q) {
     if (isEmpty(q)) return -1;
     return q->datas[0];
 }
-

@@ -5,17 +5,14 @@
 
 typedef struct Screen {
     Shape **elements;
-    struct Screen *next;
-    char* title;
     int count;
     int capacity;
 } Screen;
 
-Screen* screen_create(Screen *next);
+Screen* screen_create();
 void screen_add(Screen *s, Shape *shape);
 void screen_render(Screen *s, SDL_Renderer* renderer);
 void screen_handle_event(Screen *s, SDL_Event *e);
 void screen_destroy(Screen *s);
-void screen_clear(Screen *s);
 
 #endif
